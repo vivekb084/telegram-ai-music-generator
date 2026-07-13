@@ -1,0 +1,444 @@
+{
+  "name": "Automated AI Music Generation with ElevenLabs",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Automated AI Music Generation with ElevenLabs & Google Drive\n\nThis workflow automates the creation, storage, and cataloging of AI-generated music using the ElevenLabs Music API, Google Sheets, and Google Drive.\n\nWith Eleven Music*, businesses, creators, artists, and every single one of our users can generate studio-grade music from natural language prompts. Please fill this form to register your interest in the [Eleven Music API](https://try.elevenlabs.io/ahkbf00hocnu). \n\nGenerated music has a minimum duration of 10 seconds and a maximum duration of 5 minutes.\n\n*Only paid plan\n\n## **How it works:**\nThe workflow reads music requests from Google Sheets, sends prompts to ElevenLabs Music API, uploads generated MP3s to Google Drive, and updates sheet URLs. It loops through each request with a 1-minute delay to avoid rate limits.\n\n## **Setup steps:**\nConnect ElevenLabs API, Google Sheets, and Google Drive in n8n. Add required columns and IDs, authenticate each service, then test and run the workflow to generate and store tracks automatically.\n",
+        "height": 496,
+        "width": 864
+      },
+      "id": "9af62528-2f52-42e5-a3ae-4895fe2613e5",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1008,
+        256
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "d75f42aa-b3d1-44c6-85bb-b8c95ad49472",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1184,
+        928
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "bc255351-6fd6-429e-87be-7a0ed77a2579",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -656,
+        928
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "id": "68690e64-aea7-4ffe-84f8-1d4b8d9d2fc3",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        672,
+        944
+      ],
+      "webhookId": "0694cd4a-44c9-462d-957b-c2aae16920ce",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY",
+          "mode": "list",
+          "cachedResultName": "MusicGen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "a6054ebb-9aa1-49da-94c6-ddc4e8399f1d",
+      "name": "Get tracks",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -912,
+        928
+      ],
+      "typeVersion": 4.7,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1GeYnsxyRZER4PC",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=song_{{$now.format('yyyyLLdd')}}.{{ $binary.data.fileExtension }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "12RkLk-IuYSqZVbd_zXQZ0oQECkBdQ9dJ",
+          "mode": "list",
+          "cachedResultName": "AI_MusicGen",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/12RkLk-IuYSqZVbd_zXQZ0oQECkBdQ9dJ"
+        },
+        "options": {}
+      },
+      "id": "90cbf933-3b87-4df4-8502-f1dc4cc65660",
+      "name": "Upload music",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        192,
+        944
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "vR0B64EFHkOJzH9T",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY",
+          "mode": "list",
+          "cachedResultName": "MusicGen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uHhqDXG1X793N4DXeeDcyZfwHS8h44kM2U_OGFjYwIY/edit#gid=0"
+        },
+        "columns": {
+          "value": {
+            "URL": "={{ $json.webViewLink }}",
+            "row_number": "={{ $('Loop Over Items').item.json.row_number }}"
+          },
+          "schema": [
+            {
+              "id": "N.",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "N.",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "TITLE",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "TITLE",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PROMPT",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "PROMPT",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "DURATION (ms)",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "DURATION (ms)",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "URL",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "number",
+              "display": true,
+              "removed": false,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "row_number"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "5e38296f-5b45-4fd2-8015-afa353633e99",
+      "name": "Update Link tracks",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        432,
+        944
+      ],
+      "typeVersion": 4.7,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "z1GeYnsxyRZER4PC",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "### Compose music with ElevenLabs\nGo to Developers, create API Key. Set Music Generation from \"No Access\" to \"Access\". Set Header Auth (Name: xi-api-key, Value: YOUR_API_KEY)",
+        "height": 304,
+        "width": 320,
+        "color": 7
+      },
+      "id": "0936583c-6d8f-4556-acb5-cd05e3450309",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -416,
+        1216
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Setup tracks\nPlease  clone [this sheet](https://docs.google.com/spreadsheets/d/10yDGf9Xyx2l-zdd5S1orxZaKbW3_vnONVgRBk_CLrpg/edit?usp=sharing) and fill the columns \"Title\", \"Prompt\" and \"Duration (ms)\"",
+        "height": 304,
+        "width": 288,
+        "color": 7
+      },
+      "id": "3323cd5d-2eb0-4499-a541-9fcb96833dfd",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1008,
+        800
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Upload music and update Sheet\nUpload the music generated with ElevenLabs on Google Drive and update the Sheet with the URL of the MP3 track",
+        "height": 304,
+        "width": 592,
+        "color": 7
+      },
+      "id": "5fc3970c-10fd-4576-bdb5-08011f1e34c3",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        800
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "llama3.2:latest",
+          "mode": "list",
+          "cachedResultName": "llama3.2:latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Check if {{ $json.Url }} is empty or undefined only then \n\nHelp me update prompt that will be used for background music generation, based on below info, get more understanding from below details\n\nI only need one prompt and result only contain prompt and not other things\n\n Prompt{{ $json.Prompt }}\n  Title {{ $json.Title }}\nDuration in ms - {{ $json[\"Duration(ms)\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.ollama",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        944
+      ],
+      "id": "7c80e375-7826-4856-8814-9787550fa735",
+      "name": "OptimizePrompt",
+      "credentials": {
+        "ollamaApi": {
+          "id": "oRwyFPNivafmfiW5",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://router.huggingface.co/hf-inference/models/facebook/musicgen-small",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs",
+              "value": "={{ $json.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -48,
+        944
+      ],
+      "id": "66b952f5-cb86-412a-b82c-12deff562c56",
+      "name": "GenerateMusicUsingHuggingFace",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "GnG8JAyuRLa1fl1T",
+          "name": "HuggingFaceAPI"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get tracks": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload music": {
+      "main": [
+        [
+          {
+            "node": "Update Link tracks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "OptimizePrompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Link tracks": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get tracks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OptimizePrompt": {
+      "main": [
+        [
+          {
+            "node": "GenerateMusicUsingHuggingFace",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GenerateMusicUsingHuggingFace": {
+      "main": [
+        [
+          {
+            "node": "Upload music",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
