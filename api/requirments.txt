@@ -1,0 +1,9 @@
+torch
+transformers
+accelerate
+scipy
+soundfile
+fastapi
+uvicorn
+sentencepiece
+python-dotenv

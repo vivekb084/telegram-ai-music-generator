@@ -132,6 +132,12 @@ ollama run llama3.2
 
 ---
 
+## 📚 Related Resources
+
+- 💼 **LinkedIn Project Showcase:** https://www.linkedin.com/posts/vivek-bindal-8534b3102_n8n-ai-automation-share-7477735837858689025-aAWv/?utm_source=share&utm_medium=member_desktop&rcm=ACoAABoO4WtnjYvGWWu2O6oxtOHOuM
+
+---
+
 ## 🤝 Contributing
 
 Contributions, feature requests, and improvements are welcome.
