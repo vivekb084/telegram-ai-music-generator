@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY /requirments.txt .
 
 RUN pip install -U pip
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirments.txt
 
 COPY . .
 

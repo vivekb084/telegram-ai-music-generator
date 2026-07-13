@@ -17,6 +17,20 @@ This project provides an end-to-end workflow that allows users to send a text pr
 
 ---
 
+## 📋 Prerequisites
+
+Before running this project, ensure you have:
+
+- Docker & Docker Compose
+- Python 3.11+ (if running without Docker)
+- n8n
+- Ollama
+- Telegram Bot Token
+- An internet connection (required only for the first download of the MusicGen model)
+- ngrok (optional, for exposing local services)
+
+---
+
 ## 🏗️ Workflow
 
 ```
@@ -132,11 +146,98 @@ ollama run llama3.2
 
 ---
 
+## 🌐 Exposing Local Services with ngrok
+
+If you're running services locally but need them to be accessible from the internet (for example, using **n8n Cloud** or Telegram webhooks), you can expose them using **ngrok**.
+
+### 1. Expose Ollama
+
+Start the Ollama server:
+
+```bash
+ollama serve
+```
+
+Expose the default Ollama port (11434):
+
+```bash
+ngrok http 11434
+```
+
+You'll get a public URL similar to:
+
+```
+https://abcd1234.ngrok-free.app
+```
+
+Use this URL as your Ollama endpoint in n8n instead of:
+
+```
+http://localhost:11434
+```
+
+For example:
+
+```
+https://abcd1234.ngrok-free.app
+```
+
+---
+
+### 2. Expose n8n (Local Installation)
+
+If you're running n8n locally and want to receive Telegram webhooks or access it remotely, expose port **5678**:
+
+```bash
+ngrok http 5678
+```
+
+Example public URL:
+
+```
+https://wxyz5678.ngrok-free.app
+```
+
+Configure this URL wherever external access to your n8n instance is required.
+
+---
+
+### 3. Expose the MusicGen API (Optional)
+
+If your MusicGen API is also running locally and needs to be accessed externally, expose port **8000**:
+
+```bash
+ngrok http 8000
+```
+
+Example:
+
+```
+https://musicgen.ngrok-free.app
+```
+
+Replace the HTTP Request node URL in the n8n workflow:
+
+```
+http://host.docker.internal:8000/generate
+```
+
+with:
+
+```
+https://musicgen.ngrok-free.app/generate
+```
+
+---
+
+> **Note:** The free version of ngrok generates a new public URL each time you restart a tunnel. If you need a permanent URL, consider using a reserved domain with a paid ngrok plan or an alternative tunneling solution.
+
 ## 📚 Related Resources
 
 - 💼 **LinkedIn Project Showcase:** https://www.linkedin.com/posts/vivek-bindal-8534b3102_n8n-ai-automation-share-7477735837858689025-aAWv/?utm_source=share&utm_medium=member_desktop&rcm=ACoAABoO4WtnjYvGWWu2O6oxtOHOuM
 
 ---
+
 
 ## 🤝 Contributing
 
