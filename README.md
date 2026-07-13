@@ -96,11 +96,11 @@ Cyberpunk synthwave soundtrack
 
 ### n8n Workflow
 
-![Workflow](screenshots/workflow.png)
+![Workflow](screenshots/workflow.jpg)
 
 ### Telegram Bot
 
-![Telegram](screenshots/telegram-chat.png)
+![Telegram](screenshots/telegram-chat.jpg)
 
 ---
 
